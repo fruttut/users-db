@@ -63,17 +63,17 @@ public final class ConvertingExceptionToReplyErrorHandlerTest {
 	) {
 		final UserReply reply = handler.handleError(null, null, ex);
 		assertFalse(reply.success, "reply should not be successful");
-		assertNull(reply.data, "reply should not contain data");
-		assertNotNull(reply.error, "reply should contain error");
+		assertNull(reply.data, "reply should not have data");
+		assertNotNull(reply.error, "reply should have error");
 		assertEquals(
 			reason,
 			reply.error.reason,
-			"reply should have '" + reason + "' as error reason"
+			"reply should have correct error reason"
 		);
 		assertEquals(
 			message,
 			reply.error.message,
-			"reply should have '" + message + "' as error message"
+			"reply should have correct error message"
 		);
 	}
 }

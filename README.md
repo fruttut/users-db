@@ -54,7 +54,7 @@ User creation request body should be of the following format:
 
 The `id` and `creationDate` fields will be populated by the database.
 
-#Implementation Notes
+# Implementation Notes
 * Every REST endpoint from the `registry` microservice communicates with
 RabbitMQ via its own queue. This was the easiest way I could find that
   allows automatic JSON to DTO conversions.

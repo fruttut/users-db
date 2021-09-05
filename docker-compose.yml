@@ -1,0 +1,53 @@
+version: "3.9"
+services:
+  registry:
+    build: ./registry
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+    networks:
+      - outside
+      - registry
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - SPRING_RABBITMQ_HOST=${RABBITMQ_HOSTNAME}
+  db:
+    build: ./db
+    restart: on-failure
+    depends_on:
+      - rabbitmq
+      - postgres
+    networks:
+      - db
+      - postgres
+    environment:
+      - SPRING_PROFILES_ACTIVE=${PROFILE}
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://${POSTGRES_HOSTNAME}:5432/${POSTGRES_DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${POSTGRES_USERNAME}
+      - SPRING_DATASOURCE_PASSWORD=${POSTGRES_PASSWORD}
+      - SPRING_RABBITMQ_HOST=${RABBITMQ_HOSTNAME}
+  rabbitmq:
+    image: "rabbitmq"
+    hostname: ${RABBITMQ_HOSTNAME}
+    networks:
+      - registry
+      - db
+  postgres:
+    image: "postgres"
+    hostname: ${POSTGRES_HOSTNAME}
+    networks:
+      - postgres
+    environment:
+      POSTGRES_USERNAME: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB_NAME}
+
+networks:
+  outside:
+    external: true
+    name: users-db_default
+  registry:
+  db:
+  postgres:

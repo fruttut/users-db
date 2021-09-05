@@ -10,9 +10,7 @@ public final class DefaultErrorReasonToHttpStatusConverter implements ErrorReaso
 	public static final String ERROR_REASON_NOT_FOUND = "NOT_FOUND";
 	public static final String ERROR_REASON_INTERNAL = "INTERNAL";
 
-	public static final HttpStatus DEFAULT_FALLBACK_HTTP_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
-
-	private HttpStatus fallbackHttpStatus = DEFAULT_FALLBACK_HTTP_STATUS;
+	public static final HttpStatus FALLBACK_HTTP_STATUS = HttpStatus.INTERNAL_SERVER_ERROR;
 
 	private static final Map<String, HttpStatus> REASON_TO_STATUS_MAPPING = Map.ofEntries(
 		new AbstractMap.SimpleImmutableEntry<>(ERROR_REASON_VALIDATION_FAIL, HttpStatus.FORBIDDEN),
@@ -20,16 +18,8 @@ public final class DefaultErrorReasonToHttpStatusConverter implements ErrorReaso
 		new AbstractMap.SimpleImmutableEntry<>(ERROR_REASON_INTERNAL, HttpStatus.INTERNAL_SERVER_ERROR)
 	);
 
-	public HttpStatus getFallbackHttpStatus() {
-		return fallbackHttpStatus;
-	}
-
-	public void setFallbackHttpStatus(final HttpStatus status) {
-		fallbackHttpStatus = status;
-	}
-
 	public HttpStatus convert(final String reason) {
 		final HttpStatus status = REASON_TO_STATUS_MAPPING.get(reason);
-		return status != null ? status : fallbackHttpStatus;
+		return status != null ? status : FALLBACK_HTTP_STATUS;
 	}
 }
